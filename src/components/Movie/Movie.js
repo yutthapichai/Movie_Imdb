@@ -17,16 +17,22 @@ export default class Movie extends Component {
   }
   // when this class start workking will do auto
   componentDidMount() {
-    this.setState({ loading: true})
-    const endpoint = `${API_URL}movie/${this.props.match.params.movieId}?api_key=${API_KEY}&language=en-US`
-    this.fetchItem(endpoint)
+    if(localStorage.getItem(`${this.props.match.params.movieId}`)) {
+      const state = JSON.parse(localStorage.getItem(`${this.props.match.params.movieId}`))
+      this.setState({ ...state })
+      console.log(state)
+    } else {
+      this.setState({ loading: true })
+      const endpoint = `${API_URL}movie/${this.props.match.params.movieId}?api_key=${API_KEY}&language=en-US`
+      this.fetchItem(endpoint)
+    }
   }
   // if you use fetch() is two-step to handing JSON
   fetchItem = endpoint => {
     fetch(endpoint)
     .then(result => result.json())
     .then(result => {
-      console.log('Firstfetch :',result)
+      // console.log('Firstfetch :',result)
       if(result.status_code) {
         this.setState({ loading: true })
       } else{
@@ -41,8 +47,10 @@ export default class Movie extends Component {
                 actors: result.cast,
                 directors,
                 loading: false
+              }, () => {
+                localStorage.setItem(`${this.props.match.params.movieId}`, JSON.stringify(this.state))
               })
-              console.log('prints from movie:',directors)
+              // console.log('prints from movie:',directors)
             })
             .catch(e => console.error(e))
           }
