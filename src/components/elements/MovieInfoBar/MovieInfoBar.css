@@ -20,7 +20,8 @@
   float: left;
   width: 33.33%;
   box-sizing: border-box;
-  padding: 10px 20px 0 0;
+  padding: 10px 20px 0 30px;
+  color: rgb(150, 147, 147);
 }
 
 .rmdb-movieinfobar-info {
